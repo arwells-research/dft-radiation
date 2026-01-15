@@ -63,39 +63,61 @@ evolution models.
 ### **S-0001 — κ₂ scaling classification**
 Distinguishes late-time diffusive scaling (integrated OU, κ₂(t)∝t) from
 long-memory scaling (fractional Gaussian noise, κ₂(t)∝t^{2H}) via audited
-log-slope diagnostics.  
+log-slope diagnostics.
 Establishes that κ₂ scaling families are **observable and classifiable**, not assumed.
 
 ### **S-0002 — κ₂ predictive closure & adjacency sensitivity**
-Demonstrates that the coherence envelope  
+Demonstrates that the coherence envelope
 c(t)=|⟨exp(iΔϕ(t))⟩| is reconstructible from the **empirical autocovariance**
 via the discrete κ₂ functional **if and only if** long-range adjacency is retained
-(fGn_RAW PASS).  
+(fGn_RAW PASS).
 Short-memory OU fails closure; estimator modifications (e.g. Bartlett taper)
 introduce **auditable drift**, not genuine closure.
 
 ### **S-0003 — Boundary of Gaussian sufficiency (κ₃ diagnostic)**
 With κ₂ held fixed by construction, κ₃≠0 produces a **sign-reversible,
 auditable phase bias** in the complex coherence ⟨exp(iΔϕ(t))⟩, while κ₂
-continues to predict the **magnitude envelope**  
-c(t)=|⟨exp(iΔϕ(t))⟩| within declared tolerances.  
+continues to predict the **magnitude envelope**
+c(t)=|⟨exp(iΔϕ(t))⟩| within declared tolerances.
 This certifies a sharp boundary: **κ₂ is sufficient for magnitude but not for
 phase-neutral Gaussian sufficiency**.
 
 ### **S-0004 — Even-cumulant boundary (κ₄ magnitude collapse)**
 With κ₂ held fixed and a GAUSS baseline verifying pipeline identity,
 introducing κ₄≠0 produces a **systematic magnitude-envelope collapse**
-that κ₂ closure cannot explain.  
+that κ₂ closure cannot explain.
 This establishes a **categorical failure mode**: even cumulants falsify
 κ₂-only envelope models.
 
 ### **S-0004-SENS — Boundary metric & ρ₍crit₎ bracketing**
-Turns S-0004 into a **dimensionless diagnostic standard** using  
-ρ(t*) = |κ₄(t*)| / κ₂(t*)².  
+Turns S-0004 into a **dimensionless diagnostic standard** using
+ρ(t*) = |κ₄(t*)| / κ₂(t*)².
 A validity gate (`gauss_ok`) excludes noise-floor artifacts, and a
 2-consecutive-failure rule produces a reproducible bracket
 [ρ_last_nonfail, ρ_first_fail], defining a **certified Gaussian-sufficiency
 boundary** rather than a heuristic threshold.
+
+### **S-0005 — Cross-constraint closure under measurement kernels (C1 ⟷ C2 ⟷ C5)**
+Demonstrates that regime classification based on **κ₂(t)=Var(Δϕ(t)) scaling**
+(short-memory vs long-memory) is **stable under admissible measurement effects**
+(windowing, finite detector response, additive noise).
+Measurement kernels may degrade estimator quality or render cases inadmissible,
+but **cannot invert regime assignment** when classification is applied strictly
+within its certified scaling window.
+This establishes a **C5 boundary**: failure indicates measurement-dominated
+inference, not a new dynamical regime.
+
+### **S-0006 — Radiation ω generator families under κ₂ scaling (C1 ⟷ C2 ⟷ C3 ⟷ C4)**
+Demonstrates that late-time **κ₂(t)=Var(Δϕ(t)) scaling** is **stable across a finite,
+declared menu of ω(t) generator families** representing phenomenological bindings
+of temporal dynamics (C1), statistical memory (C2), linear transport (C3), and
+interface injection (C4).
+Linear transport filtering and event-driven (shot-like) interface effects may
+alter bandwidth or increment statistics, but **do not change the κ₂ scaling class**
+or violate declared α expectations on any admissible case.
+This establishes a **C3/C4 binding boundary**: failure indicates loss of a
+certified scaling window or boundary-dominated construction, not a new radiation
+regime.
 
 ---
 
