@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use or reference this work, please cite it as follows."
+title: "dft-radiation: Constraint-Complete Radiation Phenomenology in Dual-Frame Theory"
+authors:
+  - family-names: Wells
+    given-names: A. R.
+license: CC-BY-4.0
+version: 1.0.0-rc
+date-released: 2026-01-14
+repository-code: "https://github.com/arwells-research/dft-radiation"
+abstract: >
+  Constraint-complete phenomenological framework for radiation in Dual-Frame Theory,
+  organizing observable radiation properties by irreducible phase-evolution constraints
+  (C1–C5) with explicit completeness and falsification criteria.

@@ -1,0 +1,32 @@
+# -----------------------------
+# Python (general)
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.env/
+.envrc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# -----------------------------
+# Toy model generated artifacts
+# Keep directory structure, ignore contents
+# -----------------------------
+tools/phase-evolution/toys/outputs/**
+!tools/phase-evolution/toys/outputs/.gitkeep
+
+# If you ever generate artifacts alongside toys (optional safety net)
+tools/phase-evolution/toys/**/*.png
+tools/phase-evolution/toys/**/*.csv
+
+# -----------------------------
+# Internal process docs (do not publish)
+# -----------------------------
+RELEASE_CHECKLIST.md
+IMPLEMENTATION.md
