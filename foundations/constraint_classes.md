@@ -236,10 +236,20 @@ and must be applied before introducing new structure.
 ## Admissibility and Revision Clause
 
 The constraint set **C1–C5** is asserted complete for **radiation phenomenology**
-**as of 2026-01-14**.
+**as of 2026-01-18**.
 
-Discovery of a genuine radiation phenomenon that cannot be expressed as a binding of C1–C5
-without:
+As of this revision, the **κ₂-based phase-evolution admissibility program has been
+mechanized and closed via the S-0001 through S-0019 validation series.**
+
+These results establish the empirical and diagnostic refusal boundaries for:
+
+- C1 temporal rate admissibility
+- C2 statistical (memory vs Gaussianity vs coupling) admissibility
+- C4 interface coupling identifiability
+- C5 epistemic (kernel masking vs estimator limits) admissibility
+
+Discovery of a genuine radiation phenomenon that cannot be expressed as a binding of
+C1–C5 without:
 
 (a) introducing a new **fundamental phase-constraint dimension**, or  
 (b) requiring a **non-phase degree of freedom essential to radiation itself**

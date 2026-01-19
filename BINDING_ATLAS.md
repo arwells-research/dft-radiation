@@ -1,7 +1,7 @@
 # Binding Atlas — Radiation Phenomenology
 
 **Version:** 0.1.0  
-**Last updated:** 2026-01-14  
+**Last updated:** 2026-01-18  
 **Phenomena catalogued:** 28  
 **Constraint combinations observed:** 17  
 
@@ -70,6 +70,7 @@ This section answers:
 | Thermal radiation | C1 + C2 + C4 | C4 | Statistical emission |
 | Coherent backscattering | C2 + C3 | C3 | Correlated transport |
 | Optical solitons | C1 + C3 + C4 | C3 | Nonlinear phase balance † |
+| Migdal effect (nuclear recoil–induced ionization) | C4 + C5 | C4 | History-sensitive phase–interface activation † |
 
 † See `CHALLENGE_LOG.md` for boundary-clarification discussion.
 
@@ -108,6 +109,7 @@ This section answers:
 - parametric frequency conversion
 - thermal radiation
 - synchrotron radiation
+- recoil-induced electronic ionization (Migdal effect; boundary case)
 
 ### C5 — Epistemic Constraint (Phase Observation)
 - detector response
@@ -115,6 +117,7 @@ This section answers:
 - SNR-limited inference
 - coincidence detection
 - estimator bias and resolution
+- topology-based event discrimination (common-vertex recoil + electron)
 
 ---
 
@@ -140,6 +143,7 @@ The purpose is to make **coverage density visible** and highlight potential gaps
 | C2 + C3 | coherent backscattering |
 | C3 + C5 | interferometry |
 | C3 + C4 | Raman scattering |
+| C4 + C5 | Migdal effect (recoil-induced ionization; boundary) |
 | C1 + C3 + C4 | synchrotron radiation |
 | C1 + C3 + C5 | RADAR / LIDAR |
 | C1 + C2 + C4 | thermal radiation |
@@ -195,6 +199,22 @@ This document is under active population.
 Additions to this atlas are treated as **tests of completeness**, not expansions of scope.
 Proposed phenomena that resist classification are considered potential falsification
 events and must be documented.
+
+### Admissibility and diagnostic closure (v1.0)
+
+As of 2026-01-18, all declared phase-evolution admissibility and refusal logic
+is certified complete via the S-0001 through S-0019 validation artifacts.
+
+These tools do **not** introduce new constraint classes.  
+They implement the mechanical tests that ensure:
+
+- C2 correlation claims are not confused with C4 cross-trajectory coupling
+- C1 temporal curvature does not masquerade as long-memory scaling
+- κ₂ scaling classifications remain stable under continuation
+- Non-Gaussian or variance-drifting ω processes are refused rather than misclassified
+
+This establishes the repository’s full **falsification and admissibility surface**
+for radiation phenomenology under the C1–C5 framework.
 
 ---
 

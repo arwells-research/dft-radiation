@@ -186,6 +186,27 @@ Difficulty tiers:
 
 ---
 
+## CL-011 — Migdal Effect (Recoil-Induced Electronic Ionization)
+
+- **Difficulty tier:** Ambiguous  
+- **Date resolved:** 2026-01-16  
+- **Initial classification attempt:** C4  
+- **Issue encountered:**  
+  Observable ionization probability is not determined solely by nuclear recoil
+  energy, but depends on the temporal profile of the recoil impulse relative
+  to electronic phase timescales. Identical recoil energies can yield different
+  ionization outcomes, raising concern about implicit history dependence.
+- **Resolution:**  
+  Effect is classified as a phase–interface phenomenon (C4) whose observability
+  and validation depend critically on topology-based event discrimination
+  (common-vertex recoil + electron), invoking epistemic constraint (C5).
+  History sensitivity is treated as an admissibility condition within C4,
+  not as a new constraint class.
+- **Final classification:** C4 + C5  
+- **Changed docs:**  
+  - Added Migdal effect to Binding Atlas (boundary classification)
+
+---
 ## Summary statistics
 
 - **Total challenges logged:** 10  

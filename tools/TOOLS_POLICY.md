@@ -49,9 +49,11 @@ Tools must avoid promotional language. Any claim must be:
 
 ## Versioning
 
-If a tool’s outputs or semantics change materially, either:
+Versioning is not permitted until all current work is fully checked in and verified.
+
+Only after the repository state is stable and acknowledged may versioning actions be taken.
+
+If a tool’s outputs or semantics then change materially, either:
 
 - introduce a new versioned artifact ID (preferred), or
 - create a new subdirectory version.
-
-Silent mutation is not permitted.

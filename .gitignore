@@ -30,3 +30,7 @@ tools/phase-evolution/toys/**/*.csv
 # -----------------------------
 RELEASE_CHECKLIST.md
 IMPLEMENTATION.md
+
+# Local session workflow docs (do not commit)
+tools/phase-evolution/SESSION_BOOTSTRAP_CHECKLIST.md
+tools/phase-evolution/SESSION_HANDOFF.md

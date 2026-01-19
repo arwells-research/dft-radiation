@@ -119,6 +119,272 @@ This establishes a **C3/C4 binding boundary**: failure indicates loss of a
 certified scaling window or boundary-dominated construction, not a new radiation
 regime.
 
+### **S-0007 — Mixture crossover restraint (“no-wrong-claims” certification) under κ₂ scaling**
+Demonstrates that κ₂(t)=Var(Δϕ(t))–based regime classification is **restrained under
+declared mixture and crossover constructions**, formed by finite linear mixtures
+ω = ω_OU + ε·ω_fGn (with optional C3/C4 bindings).
+Using **fixed early and late audit windows**, the classifier:
+- permits **BOUNDARY (no-claim) outcomes** in crossover or mixed-scaling regions,
+- **forbids incorrect regime claims** on any admissible window,
+- and **correctly classifies the pure OU baseline** while avoiding over-interpretation
+  when no clean late-time scaling regime is realized within the declared horizon.
+This establishes a **mixture/crossover boundary**: failure indicates a false
+regime claim, not the emergence of a new dynamical regime.
+
+### **S-0008 — Drift-vs-diffusion confound (κ₂-slope non-identifiability)**
+Demonstrates that κ₂(t)=Var(Δϕ(t)) slope α≈1 in a declared window is **not sufficient**
+to distinguish true diffusive behavior from a confound in which each trajectory carries
+a small **linear drift in ω(t)** (βᵢ·t) with random βᵢ across the ensemble.
+Both constructions can yield α≈1 and pass slope admissibility, so identifying drift
+requires additional diagnostics beyond κ₂ scaling (C1/C2 boundary).
+
+### **S-0009 — Higher-order odd-cumulant boundary (κ₅ phase-structure diagnostic)**
+Demonstrates that controlled **κ₅ ≠ 0** at the innovation level produces a **sign-reversible
+phase bias** in the complex coherence ⟨exp(iΔϕ(t))⟩ while the **magnitude envelope**
+remains consistent with an even-cumulant truncation (κ₂, κ₄) over the declared window,
+establishing a categorical phase-structure boundary beyond κ₄.
+
+Using a fixed late-time audit window, this toy compares:
+
+- a **diffusion-limited baseline** (OU-like κ₂ scaling, α≈1), and  
+- the same baseline with an added **per-trajectory deterministic drift term**
+  ωᵢ,drift(t)=βᵢ·t, representing a **C5 observational/measurement-induced bias** rather
+  than a true dynamical regime.
+
+The classifier:
+
+- correctly identifies the diffusion baseline as **OK**,  
+- refuses the drift-contaminated case by returning **BOUNDARY**,  
+- and makes **no forbidden claims on any admissible window.**
+
+This establishes a clean **C2 vs C5 separation boundary**: failure would indicate that
+κ₂-based coherence scaling cannot distinguish genuine phase diffusion from slow
+instrument-induced drift.
+
+### **S-0010 — κ₂ transport vs interface discrimination (C3 ⟷ C4 identifiability)**
+
+Demonstrates that late-time κ₂(t)=Var(Δϕ(t)) scaling is **invariant under geometric transport (C3)**  
+but departs detectably under **interface-driven phase injection or exchange (C4)**.
+
+Within a fixed admissible scaling window:
+
+- OU baseline and transport-filtered cases (smoothing, dispersion) remain κ₂-consistent.
+- Interface-driven cases (shot-like injection, gain/loss envelopes) alter κ₂ scaling while remaining
+  admissible, producing a certified **C3 vs C4 separation boundary**.
+
+Failure indicates loss of constraint-class separability, not the emergence of a new regime.
+
+### **S-0011 — Kurtosis-based separation of transport vs interface effects (C3 ⟷ C4 higher-moment boundary)**
+
+Demonstrates that while κ₂ scaling remains invariant under both C3 and C4 constructions,
+**higher-order moment structure (excess kurtosis)** cleanly separates them.
+
+Within the same declared scaling window:
+
+- OU baseline and transport-only (C3) cases exhibit **near-Gaussian increment statistics** (low kurtosis).
+- Interface-injection (C4) cases exhibit **strong heavy-tail statistics** (high kurtosis), while preserving
+  κ₂ scaling class and admissibility.
+
+This establishes a **second-order C3/C4 discrimination boundary**:  
+κ₂ classifies the regime; kurtosis certifies whether deviation arises from transport or interface coupling.
+
+### **S-0012 — Sixth cumulant (κ₆) even-moment structural boundary**
+
+Extends the Gaussian sufficiency program beyond κ₄ by demonstrating that a
+controlled non-zero **sixth cumulant (κ₆ ≠ 0)** at the innovation level produces
+a measurable deformation in the coherence envelope that is **not captured by
+κ₂ + κ₄ closure alone**, while preserving admissibility and deterministic scaling.
+
+Within the declared window:
+
+- The GAUSS baseline confirms κ₂ + κ₄ magnitude closure remains valid.
+- Both κ₆+ and κ₆− cases remain admissible and preserve κ₂ scaling class.
+- The resulting envelope deformation is **sign-invariant** (even-order) and
+  therefore diagnostic of higher-order even-moment structure rather than
+  transport or interface effects.
+
+This establishes the next categorical **even-cumulant structural boundary**
+in the S-series progression.
+
+### **S-0013 — Magnitude sufficiency breakdown under strong κ₆ forcing**
+
+Builds directly on S-0012 to certify that when κ₆ is forced beyond a deterministic
+strength threshold (`k6_heavy_b = 25.0`), the even-cumulant magnitude model
+(κ₂ + κ₄) **fails in a controlled, auditable manner**, while the GAUSS and mild κ₆
+cases continue to pass.
+
+Within the same declared window:
+
+- **GAUSS** and **κ₆_MILD** cases remain fully consistent with κ₂ + κ₄ magnitude closure (PASS).
+- The **κ₆_HEAVY** construction produces a clear, reproducible **magnitude-closure failure**
+  exceeding the declared tolerances (FAIL), demonstrating that κ₆ can couple into
+  the envelope magnitude even when κ₄ is held fixed.
+
+This establishes a certified **κ₆ magnitude-sufficiency boundary** and marks the
+first point at which higher-order even cumulants falsify the truncated envelope
+model itself rather than only deforming the phase structure.
+
+### **S-0014 — κ₂+κ₄ magnitude closure under C5 measurement kernels with higher-cumulant contamination (“no false OK”)**
+
+Certifies that **C5 measurement kernels can partially mask higher-cumulant (κ₆) structure**, but the framework must **forbid false PASS outcomes** when identifiability is lost.
+
+This toy compares **truth envelopes** (computed from the unobserved ω) against **κ₂+κ₄ magnitude predictions** computed from *kernel-corrupted* observations ω̂ produced by a declared C5 measurement model (moving-average blur + additive noise).
+
+Within a fixed audit window:
+
+- **GAUSS_MILD** (ma=1, SNR=80 dB): κ₂+κ₄ magnitude closure remains valid (PASS).
+- **K6_MILD** (κ₆-heavy innovations, ma=1, SNR=80 dB): κ₂+κ₄ closure **must fail** strongly (FAIL), proving higher even cumulants can break magnitude closure even under good measurement.
+- **K6_STRONG** (same κ₆-heavy truth, but ma=25, SNR=10 dB): kernel exceeds identifiability gates, so the toy **refuses certification** and returns **BOUNDARY**—explicitly **forbidding “false OK”** under strong C5 masking.
+
+This establishes a **C5 masking boundary**: when measurement kernels violate declared identifiability limits, the system must return **BOUNDARY** rather than certify κ₂+κ₄ magnitude closure, even if the corrupted inference appears superficially consistent.
+
+### **S-0015 — κ₂ scaling misclassification under cross-trajectory coupling (“C2 vs C4 integrity gate”)**
+
+Certifies that **cross-trajectory coupling (C4-style shared/interface structure) can
+produce misleading κ₂(t) scaling that superficially resembles long-memory (C2-style)
+behavior**, and therefore must be **detected and refused**, not misclassified.
+
+This toy introduces a deterministic **variance-of-mean coupling detector**:
+
+r_mean = Varₜ( meanᵢ ωᵢ(t) ) / meanᵢ Varₜ( ωᵢ(t) )
+
+Within a fixed admissible audit window:
+
+- **C1_OU_BASE**: independent OU trajectories.  
+  κ₂ scaling classifies correctly as **OK_OU**.
+- **C2_LM_TRUE**: uncoupled long-memory Gaussian (fractional innovations).  
+  κ₂ scaling classifies correctly as **OK_LM**.
+- **C4_COUPLED**: trajectories share a low-amplitude common component.  
+  The detector flags coupling, and the classifier is forced to **BOUNDARY**  
+  — explicitly **forbidding false long-memory certification.**
+
+This establishes the first **C2 ⟷ C4 admissibility boundary** for κ₂-based
+classification: long-memory and interface-coupled structure are distinguishable
+at the cumulant level, and any detected coupling invalidates κ₂-only claims.
+
+A PASS certifies that:
+- **C2-style memory and C4-style coupling remain separable**, and
+- the framework enforces the required **“no wrong claims” refusal logic.**
+
+### **S-0016 — κ₂ scaling admissibility under non-stationary temporal curvature (“C1 curvature guard”)**
+
+Certifies that **deterministic or slowly varying temporal curvature in ω(t) can
+mimic long-memory-like κ₂(t) scaling within a finite audit window**, and therefore
+κ₂-slope classification is admissible **only when the observed phase rate remains
+locally stationary.**
+
+This toy adds a per-trajectory quadratic temporal term and enforces a
+window-restricted **curvature admissibility detector** by fitting the ensemble-mean
+phase rate ω̄(t) to:
+
+  ω̄(t) ≈ a + b·t + c·t²
+
+and defining a dimensionless curvature significance metric:
+
+  curv_z = |c| / SE(c)
+
+If `curv_z` exceeds the declared `curvature_bound`, the case is labeled
+**BOUNDARY**, never **OK_LM**, regardless of κ₂-slope agreement.
+
+Within the fixed late-time audit window:
+
+- **C1_OU_BASE**: independent OU trajectories with no curvature.  
+  κ₂ scaling classifies correctly as **OK_OU**.
+- **C2_LM_TRUE**: uncoupled long-memory Gaussian baseline.  
+  κ₂ scaling classifies correctly as **OK_LM**.
+- **C1_CURVED**: OU noise plus deterministic quadratic curvature.  
+  The curvature detector triggers, and the classifier is forced to **BOUNDARY**  
+  — explicitly **forbidding false long-memory certification under temporal drift.**
+
+This establishes the first **C1 admissibility boundary for κ₂-based
+classification**: apparent long-memory scaling is invalid unless temporal
+curvature is ruled out.
+
+A PASS certifies that:
+- **C1-style curvature and C2-style memory remain separable**, and  
+- the framework enforces the required **“no wrong claims” refusal logic** for
+  κ₂-slope attribution.
+
+### **S-0017 — Cross-window κ₂-slope regime consistency (“temporal continuation admissibility”)**
+
+Certifies that **κ₂-slope classification is admissible only when the inferred scaling
+exponent α remains stable across adjacent late-time continuation windows.**
+
+While S-0015 guards against cross-trajectory coupling and S-0016 guards against
+temporal curvature, both are *window-local.*  
+S-0017 introduces the first **cross-window persistence test**, ensuring that a process
+identified as OU-like or long-memory-like in one admissible window must remain
+consistent in the next.
+
+This toy evaluates two fixed late-time windows:
+
+- **Window A:** [20, 40]  
+- **Window B:** [40, 80]
+
+and enforces the continuation rule:
+
+  |α₍A₎ − α₍B₎| < declared consistency tolerance
+
+Within this framework:
+
+- **C1_OU_BASE:** short-memory OU innovations classify consistently → **OK_OU**
+- **C2_LM_TRUE:** uncoupled long-memory Gaussian innovations classify consistently → **OK_LM**
+- **C1_CURVED:** deterministic temporal curvature causes cross-window drift → **BOUNDARY**
+
+A PASS certifies that **temporal stationarity is a required Σ₂ admissibility condition
+for κ₂-based regime classification.**  
+If scaling does not persist under continuation, the system must refuse
+certification rather than produce a false “OK_LM.”
+
+This establishes the first **cross-window stationarity boundary** for phase-evolution
+diagnostics in Dual-Frame Theory.
+
+### **S-0018 — Non-Gaussian innovation masquerade under correct κ₂ scaling (“distributional refusal gate”)**
+
+Certifies that **κ₂(t) scaling alone is not sufficient to certify regime admissibility**, because a process can
+exhibit the correct κ₂-slope α (OU-like or long-memory-like) while remaining strongly **non-Gaussian in ω**.
+
+This toy adds a fixed, window-restricted **excess-kurtosis guard** on ω:
+
+g₂ = μ₄/μ₂² − 3
+
+Within a declared admissible late-time window:
+
+- **C1_OU_BASE**: Gaussian OU innovations.  
+  κ₂ scaling certifies **OK_OU**, and kurtosis remains near zero.
+- **C2_LM_TRUE**: uncoupled long-memory Gaussian innovations (fixed H).  
+  κ₂ scaling certifies **OK_LM**, and kurtosis remains near zero.
+- **NON_GAUSS**: OU-like κ₂ scaling driven by symmetric heavy-tail innovations.  
+  κ₂ slope may still fall in the OU band, but the kurtosis guard detects non-Gaussianity and forces **BOUNDARY**  
+  — explicitly **forbidding false OK_OU/OK_LM certification** under distributional masquerade.
+
+This establishes a **C2 distributional integrity boundary** for κ₂-based classification:  
+regime identification requires not only scaling consistency, but also declared admissibility of the innovation
+distribution under observation.
+
+### **S-0019 — Variance-drift masquerade under admissible κ₂ scaling (“Σ₂ variance guard”)**
+
+Certifies that **κ₂(t) scaling alone is not sufficient to certify temporal admissibility**, because a process can
+exhibit OU-like or long-memory-like κ₂-slope behavior while its **variance budget drifts within the audit window**.
+
+This toy introduces a fixed, window-restricted **variance-drift refusal gate** on ω:
+
+v̂(t) = Varᵢ(ωᵢ(t))  
+drift_z = |log(v̂(t_max)/v̂(t_min))| · √n_w
+
+Within a declared admissible late-time window:
+
+- **C1_OU_BASE**: stationary OU innovations.  
+  κ₂ scaling certifies **OK_OU**, and the variance guard remains quiet.
+- **C2_LM_TRUE**: stationary long-memory Gaussian innovations (fixed H).  
+  κ₂ scaling certifies **OK_LM**, and the variance guard remains quiet.
+- **C5_VAR_DRIFT**: OU-like scaling under a deterministic variance envelope.  
+  The κ₂-slope alone falls within the long-memory band, but the variance guard detects drift and forces **BOUNDARY**  
+  — explicitly **forbidding false OK_OU/OK_LM certification** under non-stationary variance masquerade.
+
+This establishes a **Σ₂ temporal-stationarity integrity boundary** for κ₂-based classification:  
+regime identification requires both correct κ₂ scaling and **locally stationary variance of ω(t)** within the audit window.
+
 ---
 
 ## Why this matters for DFT
