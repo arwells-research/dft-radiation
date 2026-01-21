@@ -207,12 +207,35 @@ Difficulty tiers:
   - Added Migdal effect to Binding Atlas (boundary classification)
 
 ---
+
+## CL-012 — Pseudogap Spin–Charge Correlation Scaling (Quantum Simulator)
+
+- **Difficulty tier:** Boundary clarification  
+- **Date resolved:** 2026-01-20  
+- **Initial classification attempt:** C2  
+- **Issue encountered:**  
+  Persistent correlations appear in the absence of spatial order and
+  without an identifiable emission, binding, or interface process,
+  raising concern that a new constraint class might be required to
+  account for “hidden order” or many-body phase structure.
+- **Resolution:**  
+  The phenomenon is classified strictly as **phase correlation persistence**
+  (C2), with **epistemic constraint** (C5) arising from temperature-normalized,
+  multi-point correlation inference. Loss of spatial order does not imply
+  loss of phase coherence; no phase–source interface (C4) is exercised.
+  Universal scaling reflects admissibility bounds, not binding or emission.
+- **Final classification:** C2 + C5  
+- **Changed docs:**  
+  - Added pseudogap spin–charge correlation scaling to `BINDING_ATLAS.md`
+
+---
+
 ## Summary statistics
 
-- **Total challenges logged:** 10  
+- **Total challenges logged:** 12  
 - **Easy:** 4  
 - **Ambiguous:** 4  
-- **Boundary clarification required:** 2  
+- **Boundary clarification required:** 4  
 
 No case required introduction of a new constraint class.
 
@@ -230,3 +253,4 @@ No case required introduction of a new constraint class.
 
 **Challenge Log**  
 *dft-radiation — documenting where the framework was tested, not where it was comfortable*
+
