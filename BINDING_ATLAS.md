@@ -71,6 +71,7 @@ This section answers:
 | Coherent backscattering | C2 + C3 | C3 | Correlated transport |
 | Optical solitons | C1 + C3 + C4 | C3 | Nonlinear phase balance † |
 | Migdal effect (nuclear recoil–induced ionization) | C4 + C5 | C4 | History-sensitive phase–interface activation † |
+| Pseudogap spin–charge correlation scaling (quantum simulator) | C2 + C5 | C2 | Correlation persists without spatial order; universal scaling inferred from multi-point measurements † |
 
 † See `CHALLENGE_LOG.md` for boundary-clarification discussion.
 
@@ -219,4 +220,5 @@ for radiation phenomenology under the C1–C5 framework.
 ---
 
 **Binding Atlas**  
+
 *dft-radiation — making constraint completeness inspectable*
