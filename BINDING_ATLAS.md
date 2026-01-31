@@ -1,3 +1,4 @@
+
 # Binding Atlas — Radiation Phenomenology
 
 **Version:** 0.1.0  
@@ -50,6 +51,7 @@ This section answers:
 | Antibunching | C2 | C2 | Non-classical statistics |
 | Bell test (photonic) | C2 + C5 | C2 | Correlation + inference |
 | HOM interference | C2 + C5 | C2 | Two-photon correlation |
+| Multi-photon interference | C2 | C2 | Higher-order phase correlations |
 | Polarization | C3 | C3 | Vector phase geometry |
 | Orbital angular momentum (OAM) | C3 | C3 | Helical phase structure |
 | Birefringence | C3 | C3 | Mode-dependent delay |
@@ -72,7 +74,6 @@ This section answers:
 | Optical solitons | C1 + C3 + C4 | C3 | Nonlinear phase balance † |
 | Migdal effect (nuclear recoil–induced ionization) | C4 + C5 | C4 | History-sensitive phase–interface activation † |
 | Pseudogap spin–charge correlation scaling (quantum simulator) | C2 + C5 | C2 | Correlation persists without spatial order; universal scaling inferred from multi-point measurements † |
-
 † See `CHALLENGE_LOG.md` for boundary-clarification discussion.
 
 ---
@@ -91,6 +92,7 @@ This section answers:
 ### C2 — Statistical Constraint (Phase Correlation)
 - classical and quantum coherence (G¹, G²)
 - bunching / antibunching
+- multi-photon interference
 - Bell correlations
 - HOM interference
 - superradiance
@@ -132,7 +134,7 @@ The purpose is to make **coverage density visible** and highlight potential gaps
 | Constraint combination | Representative phenomena |
 |-----------------------|--------------------------|
 | C1 | monochromatic radiation |
-| C2 | antibunching |
+| C2 | antibunching; multi-photon interference |
 | C3 | polarization |
 | C4 | spontaneous emission |
 | C5 | SNR-limited spectroscopy |
@@ -220,5 +222,5 @@ for radiation phenomenology under the C1–C5 framework.
 ---
 
 **Binding Atlas**  
-
 *dft-radiation — making constraint completeness inspectable*
+

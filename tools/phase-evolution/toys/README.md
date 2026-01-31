@@ -106,6 +106,64 @@ Each toy prints PASS/FAIL banners and returns a nonzero exit code on failure.
   long-memory κ₂ band is detected and refused, and is labeled **BOUNDARY** rather
   than misclassified — enforcing “no false OK” under variance drift.
 
+- `s0020_winding_sector_admissibility_demo.py`
+  Winding-sector admissibility gate (derivational): certifies that **κ₂(t) scaling is
+  not sufficient for regime attribution unless the implied T-frame phase progression
+  remains admissible under winding-sector continuation.** Independent OU and true
+  long-memory Gaussian baselines pass (OK_OU and OK_LM). A constructed case that
+  matches κ₂-slope locally but violates winding-sector continuity is refused and
+  labeled **BOUNDARY**, enforcing “no false OK_LM” under sector violation.
+
+- `s0021_k2_vs_aperture_admissibility_demo.py`
+  Coherence-aperture admissibility gate (derivational): certifies that **κ₂(t) scaling is
+  not sufficient for regime attribution unless the implied phase-spread budget remains
+  within the declared coherence aperture L over the audit window.** Independent OU and
+  true long-memory Gaussian baselines pass (OK_OU and OK_LM) with `eta_max ≤ 1`, where
+  `eta(t)=sqrt(κ₂(t))/L`. A constructed aperture-excess case preserves κ₂-slope class
+  but forces `eta_max > 1` and is refused and labeled **BOUNDARY**, enforcing “no false OK_*”
+  under coherence-aperture violation.
+
+- `s0022_estimator_manufactured_scaling_guard.py`
+  Estimator-manufactured scaling refusal gate (C5 integrity): certifies that **κ₂(t) slope-based regime
+  attribution is not admissible under declared inference/estimator pathologies**, even when fitted α
+  falls in OU/LM bands. Independent OU and true long-memory Gaussian baselines pass (OK_OU and OK_LM).
+  Fixed C5 confounds (overlap reuse, resample dt mismatch, and differencing) are forced to **BOUNDARY**
+  (never OK_*), enforcing “no false OK” under estimator-manufactured scaling.
+
+- `s0023_transport_masquerade_guard.py`
+  Transport-manufactured κ₂ scaling guard (C3 integrity): certifies that **κ₂-slope regime attribution is
+  not admissible when a declared C3 dispersive transport binding imprints a detectable transport signature**
+  in the audit window. Independent OU and true long-memory Gaussian baselines pass (OK_OU and OK_LM).
+  A dispersion-filtered OU case is forced to **BOUNDARY** when transport is detected, enforcing “no false OK_*”
+  under C3-induced scaling masquerade.
+
+- `s0024_cross_observable_consistency_guard.py`
+  Cross-observable admissibility gate: certifies that **κ₂-slope regime attribution
+  must remain consistent with all independent Σ₂ guards (coupling, curvature,
+  variance drift, and aperture).** Independent OU and true long-memory Gaussian
+  baselines pass (OK_OU and OK_LM). Any case that preserves κ₂-slope locally but
+  violates a guard is refused and labeled **BOUNDARY**, enforcing “no false OK”
+  under multi-constraint inconsistency.
+
+- `s0025_cross_window_persistence_guard.py`
+  Cross-window persistence gate (Σ₂ continuation): certifies that κ₂-slope regime attribution (OK_OU/OK_LM) is admissible
+  only when scaling persists across **adjacent late-time continuation windows** and the declared Σ₂ guard bundle remains
+  quiet in **both** windows. Independent OU and true long-memory Gaussian baselines persist and pass. Constructed cases
+  that violate coupling, curvature, or aperture constraints are refused and labeled **BOUNDARY**, enforcing “no false OK”
+  under continuation.
+
+- `s0026_real_stream_harness_guard.py`
+  Real-stream admissibility harness (C5 deployment gate): certifies that a measurement-like ω̂(t)
+  stream can be evaluated by the same κ₂-slope + Σ₂ refusal ladder without producing false `OK_*`
+  outcomes. Synthetic OU and true long-memory Gaussian baselines still certify `OK_OU` and `OK_LM`,
+  while irregular sampling / gaps / dt mismatch trigger a forced **BOUNDARY** (never `OK_*`),
+  preserving the “no false OK under C5” contract.
+
+- `s0027_finite_N_robustness_gate.py`
+  Finite-N / finite-horizon robustness gate (no-scan): evaluates the full κ₂+guards
+  ladder under a fixed config menu (canonical, finite-N stress, finite-horizon stress)
+  with a fixed replicate bundle. PASS requires OU_BASE stays **OK_OU**, LM_TRUE stays
+  **OK_LM**, and all constructed violations remain **BOUNDARY** across all configs.
 
 ## Run examples
 
@@ -141,4 +199,19 @@ From `tools/phase-evolution/`:
     python toys/s0018_non_gaussian_masquerade_boundary_demo.py --write_outputs
     python toys/s0019_variance_drift_masquerade_boundary_demo.py
     python toys/s0019_variance_drift_masquerade_boundary_demo.py --write_outputs
-
+    python toys/s0020_winding_sector_admissibility_demo.py
+    python toys/s0020_winding_sector_admissibility_demo.py --write_outputs
+    python toys/s0021_k2_vs_aperture_admissibility_demo.py
+    python toys/s0021_k2_vs_aperture_admissibility_demo.py --write_outputs
+    python toys/s0022_estimator_manufactured_scaling_guard.py
+    python toys/s0022_estimator_manufactured_scaling_guard.py --write_outputs    
+    python toys/s0023_transport_masquerade_guard.py
+    python toys/s0023_transport_masquerade_guard.py --write_outputs 
+    python toys/s0024_cross_observable_consistency_guard.py
+    python toys/s0024_cross_observable_consistency_guard.py --write_outputs 
+    python toys/s0025_cross_window_persistence_guard.py
+    python toys/s0025_cross_window_persistence_guard.py --write_outputs 
+    python toys/s0026_real_stream_harness_guard.py
+    python toys/s0026_real_stream_harness_guard.py --write_outputs 
+    python toys/s0027_finite_N_robustness_gate.py
+    python toys/s0027_finite_N_robustness_gate.py --write_outputs

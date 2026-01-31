@@ -1210,3 +1210,414 @@ Exit codes:
 
 **Interpretation boundary:**  
 This item certifies a Σ₂ admissibility rule: κ₂-slope regime claims require a locally stationary variance budget for ω. The detector is diagnostic and window-restricted; no ontology is claimed beyond the declared construction.
+
+---
+
+## S-0020: Winding-sector admissibility guard for κ₂-slope regime claims (T-frame C1 gate)
+
+**Claim:**  
+κ₂-slope classification can appear long-memory-consistent within a fixed audit window even when the underlying
+T-frame phase advance violates a winding-sector admissibility condition. Therefore κ₂-slope attribution is
+admissible **only when winding-sector hops are absent** in the declared audit window.
+
+S-0020 certifies a strict refusal rule: any case exhibiting **stepwise phase advances** exceeding ±π
+(i.e. a winding-sector hop) must be labeled **BOUNDARY**, never `OK_OU` / `OK_LM`, regardless of κ₂ slope.
+
+**Assumptions:**
+- Phase accumulation: Δϕ(t)=∫₀ᵗ ω(s)ds (discrete cumulative sum with fixed Δt).
+- Centering: global DC removal only (one constant mean over ensemble×time), identical across cases.
+- κ₂-slope classifier is computed from κ₂(t)=Var[Δϕ(t)] by a linear fit of log κ₂ vs log t over a **declared fixed late-time window**.
+- A **true long-memory baseline** is provided by fractional Gaussian noise with fixed H (no scanning).
+- Winding-sector hop definition is **declared and fixed**:
+  - Per-step phase increment: dϕᵢ[k] := ωᵢ[k]·Δt
+  - Hop event: |dϕᵢ[k]| > π (stepwise phase advance crosses a winding boundary)
+  - Window-restricted count: n_hops := #{(i,k) in window_steps : |dϕᵢ[k]| > π}
+  - Decision rule: hop_detected := (n_hops > 0)
+- The confound construction is **fixed** (no tuning): OU-like ω with rare symmetric spike injections at fixed probability and fixed amplitude.
+
+**Repro:**
+- Command(s): `python toys/s0020_winding_sector_admissibility_demo.py`
+- Inputs: none (deterministic seed; parameters declared in-file via `S0020Config`).
+- Outputs (only with `--write_outputs`):
+  - `toys/outputs/s0020_cases.csv`
+  - `toys/outputs/s0020_audit.csv`
+
+**Expected output (fixed subcases, same fixed window):**
+- **C1_OU_BASE:** admissible; α in OU band; hop_detected = 0 → `OK_OU`.
+- **C2_LM_TRUE:** admissible; α in LM band; hop_detected = 0 → `OK_LM`.
+- **C1_WIND_HOP:** α may fall misleadingly in OU/LM bands, but hop_detected = 1 → `BOUNDARY`.
+  If any case is inadmissible (fit or window), result is `INCONCLUSIVE` (no claim).
+
+Exit codes:
+- `0` → PASS iff OU_BASE is `OK_OU`, LM_TRUE is `OK_LM`, and WIND_HOP is refused (`BOUNDARY` with hop_detected=1).
+- `2` → FAIL if either baseline fails, or if WIND_HOP is tagged `OK_OU`/`OK_LM` while hop_detected=1.
+- `3` → INCONCLUSIVE if required baselines are inadmissible (no claim).
+
+**Failure interpretation:**
+- If OU_BASE or LM_TRUE produce hop_detected=1, the winding-sector hop definition is not compatible with the declared dt/window.
+- If WIND_HOP yields `OK_OU` or `OK_LM` with hop_detected=1, classifier integrity fails (hard FAIL).
+- If WIND_HOP is consistently inadmissible, the regime is horizon/window dominated → INCONCLUSIVE (do not tune).
+
+**Interpretation boundary:**  
+This item certifies a T-frame admissibility constraint: κ₂-slope regime claims require stepwise winding-sector validity.
+The hop metric is diagnostic and window-restricted; no additional ontology is claimed beyond the declared bound.
+
+---
+
+## S-0021: κ₂-slope vs coherence-aperture consistency (C2 ⟷ C5 admissibility gate)
+
+**Claim:**  
+κ₂-slope regime classification (OU vs long-memory) is admissible **only when** the implied phase-spread
+budget remains within a declared coherence-aperture limit **L** over the fixed audit window. Any case with
+`max_window η(t) > 1`, where `η(t)=sqrt(κ₂(t))/L`, must be labeled **BOUNDARY**, never `OK_OU` / `OK_LM`,
+even if κ₂-slope is otherwise admissible and correctly classified.
+
+**Assumptions:**
+- Phase accumulation: Δϕ(t)=∫₀ᵗ ω(s)ds (discrete cumulative sum with fixed Δt).
+- Centering: global DC removal only (one constant mean over ensemble×time), identical across cases.
+- κ₂(t)=Var[Δϕ(t)] computed across trajectories at each time step.
+- κ₂-slope classifier: α from a linear fit of log κ₂ vs log t over a **declared fixed late-time window** with admissibility gates:
+  - minimum point count in window,
+  - minimum r²,
+  - minimum κ₂ at window end.
+- A **true long-memory baseline** is provided by fractional Gaussian noise (Davies–Harte) with fixed H (no scanning).
+- Coherence aperture **L** is a **declared constant** (no tuning, no fitting).
+- Aperture admissibility is declared and fixed:
+  - σϕ(t)=sqrt(κ₂(t))
+  - η(t)=σϕ(t)/L
+  - `eta_max := max_{t in window} η(t)`
+  - `aperture_violation := (eta_max > 1)`
+- Confound construction is fixed (no tuning): `APERTURE_EXCESS := aperture_scale * LM_TRUE` with a declared constant `aperture_scale>1`.
+
+**Repro:**
+- Command(s): `python toys/s0021_k2_vs_aperture_admissibility_demo.py`
+- Inputs: none (deterministic seed; parameters declared in-file via `S0021Config`).
+- Outputs (only with `--write_outputs`):
+  - `toys/outputs/s0021_cases.csv`
+  - `toys/outputs/s0021_audit.csv`
+
+**Expected output (fixed subcases, same fixed window):**
+- **C1_OU_BASE:** admissible; α in OU band; `aperture_violation = 0` → `OK_OU`.
+- **C2_LM_TRUE:** admissible; α in LM band; `aperture_violation = 0` → `OK_LM`.
+- **C5_APERTURE_EXCESS:** slope-admissible (same α band as LM_TRUE), but `aperture_violation = 1` → `BOUNDARY`.
+
+Exit codes:
+- `0` → PASS iff OU_BASE is `OK_OU`, LM_TRUE is `OK_LM`, and APERTURE_EXCESS is refused (`BOUNDARY` with `aperture_violation=1`).
+- `2` → FAIL if either baseline fails, or if APERTURE_EXCESS is tagged `OK_OU`/`OK_LM` while `aperture_violation=1`.
+- `3` → INCONCLUSIVE if required baselines are inadmissible (no claim).
+
+**Failure interpretation:**
+- If OU_BASE or LM_TRUE yield `aperture_violation=1`, then the declared L / ω amplitude / dt / horizon are inconsistent.
+- If APERTURE_EXCESS yields `OK_OU` or `OK_LM` with `aperture_violation=1`, classifier integrity fails (hard FAIL).
+- If APERTURE_EXCESS is inadmissible by slope-fit, the regime is horizon-dominated → INCONCLUSIVE (do not tune).
+
+**Interpretation boundary:**  
+This item certifies a C2/C5 admissibility condition: κ₂-based regime claims require that the inferred
+phase diffusion stays within the declared coherence-aperture limit. The aperture metric is diagnostic
+and window-restricted; no new ontology or fit parameters are introduced.
+
+---
+
+## S-0022: Estimator-manufactured κ₂ scaling guard (C5 integrity gate)
+
+**Claim:**  
+κ₂-slope regime classification (OU vs long-memory) can be manufactured, invalidated, or rendered non-interpretable by
+declared inference/estimator choices. Therefore κ₂-slope attribution is admissible **only when estimator-integrity
+conditions are satisfied**; any detected C5 estimator pathology must be labeled **BOUNDARY**, never `OK_OU` / `OK_LM`,
+even if the fitted κ₂ slope falls inside an OU/LM band.
+
+**Assumptions:**
+- Phase accumulation: Δϕ(t)=∫₀ᵗ ω(s)ds (discrete cumulative sum with fixed Δt used by the inference).
+- Centering: global DC removal only (one constant mean over ensemble×time), identical across cases.
+- κ₂-slope classifier is computed from κ₂(t)=Var[Δϕ(t)] by a linear fit of log κ₂ vs log t over a **declared fixed late-time window**.
+- A **true long-memory baseline** is provided by fractional Gaussian noise with fixed H (no scanning).
+- Declared C5 estimator confounds are **fixed** (no tuning/scanning), and carry explicit integrity flags:
+  - **OVERLAP_REUSE:** moving-average smoothing with stride=1, reuse_factor = ma_window; violation if reuse_factor > reuse_factor_max.
+  - **RESAMPLE_DT_MISMATCH:** downsample by resample_factor, but integrate using the original dt (declared mismatch).
+  - **DIFFERENCING:** replace ω with Δω; this changes the modeled observable, so κ₂-slope regime attribution on Δω is refused by construction.
+- Refusal rule (hard): any detected integrity violation forces **BOUNDARY** (never OK_*), regardless of κ₂ slope.
+
+**Repro:**
+- Command(s): `python toys/s0022_estimator_manufactured_scaling_guard.py`
+- Inputs: none (deterministic seed; parameters declared in-file via `S0022Config`).
+- Outputs (only with `--write_outputs`):
+  - `toys/outputs/s0022_cases.csv`
+  - `toys/outputs/s0022_audit.csv`
+
+**Expected output (fixed subcases, same fixed window):**
+- **C1_OU_BASE:** admissible; α in OU band → `OK_OU`.
+- **C2_LM_TRUE:** admissible; α in LM band → `OK_LM`.
+- **C5_OVERLAP_REUSE:** α may remain OU-like, but reuse violation triggers → `BOUNDARY`.
+- **C5_RESAMPLE_DT_MISMATCH:** α may appear in-band, but dt mismatch triggers → `BOUNDARY`.
+- **C5_DIFFERENCED:** refused by construction → `BOUNDARY` (no κ₂-slope claim attempted).
+  If a baseline fit is inadmissible (r²/κ₂ floor/point-count), result is `INCONCLUSIVE` (no claim).
+
+Exit codes:
+- `0` → PASS iff OU_BASE is `OK_OU`, LM_TRUE is `OK_LM`, and all C5 confounds are refused (`BOUNDARY`).
+- `2` → FAIL if either baseline fails, or if any C5 confound is tagged `OK_OU` / `OK_LM` (forbidden false OK).
+- `3` → INCONCLUSIVE if required baselines are inadmissible (no claim).
+
+**Failure interpretation:**
+- If OU_BASE or LM_TRUE fail admissibility or misclassify, the κ₂-slope ladder is not stable under the declared dt/window (hard FAIL).
+- If any declared C5 confound yields `OK_OU` or `OK_LM`, estimator-integrity refusal logic fails (hard FAIL: “false OK permitted”).
+- If a confound is consistently inadmissible rather than refused, the case is horizon/window dominated → INCONCLUSIVE (do not tune).
+
+**Interpretation boundary:**  
+This item certifies a C5 admissibility constraint: κ₂-slope regime claims are invalid under declared estimator pathologies
+(overlap reuse, dt mismatch under resampling, and differencing without an explicit binding model). The guards are diagnostic
+and window-restricted; no additional ontology is claimed beyond the declared integrity rules.
+
+---
+
+## S-0023: Transport-manufactured κ₂ scaling guard (C3 integrity gate)
+
+**Claim:**  
+κ₂-slope regime classification is **not admissible** when a declared C3 transport binding introduces a detectable
+transport signature in the observed ω̂(t); in that case the result must be **BOUNDARY**, never `OK_OU` / `OK_LM`,
+even if α falls inside the OU/LM κ₂ bands.
+
+**Assumptions:**
+- Phase accumulation: Δϕ(t)=∫₀ᵗ ω(s)ds (discrete cumulative sum with fixed Δt).
+- Centering: global DC removal only (one constant mean over ensemble×time), identical across cases.
+- κ₂-slope classifier is computed from κ₂(t)=Var[Δϕ(t)] by a linear fit of log κ₂ vs log t over a **declared fixed late-time window**.
+- A **true long-memory baseline** is provided by fractional Gaussian noise with fixed H (no scanning).
+- C3 transport binding is **declared and fixed** as a per-trajectory, identical LTI convolution:
+  - ω̂_i(t) := (h * ω_i)(t) with a long-tail, oscillatory FIR kernel h[m] ∝ (m+1)^(-p) cos(2π m / period),
+    fixed length and normalization (no tuning/scanning).
+- A window-restricted **transport signature detector** is declared and fixed on ω̂ via autocovariance lags:
+  - compute R̂(τ) over lags 1..max_lag inside the audit window (ensemble+time averaged),
+  - compute sign_changes in R̂(τ) and neg_mass_ratio := Σ|R̂(τ)<0| / Σ|R̂(τ)|,
+  - transport_detected := (sign_changes ≥ min_sign_changes) AND (neg_mass_ratio ≥ min_neg_mass_ratio).
+- Refusal rule: if transport_detected=1, tag is forced to **BOUNDARY** regardless of κ₂ slope band.
+
+**Repro:**
+- Command(s): `python toys/s0023_transport_masquerade_guard.py`
+- Inputs: none (deterministic seed; parameters declared in-file via `S0023Config`).
+- Outputs (only with `--write_outputs`):
+  - `toys/outputs/s0023_cases.csv`
+  - `toys/outputs/s0023_audit.csv`
+
+**Expected output (fixed subcases, same fixed window):**
+- **C1_OU_BASE:** admissible; α in OU band; transport_detected = 0 → `OK_OU`.
+- **C2_LM_TRUE:** admissible; α in LM band; transport_detected = 0 → `OK_LM`.
+- **C3_DISPERSION_FILTERED:** transport_detected = 1 → `BOUNDARY` (never `OK_*`).
+  If any case is inadmissible (fit or window), result is `INCONCLUSIVE` (no claim).
+
+Exit codes:
+- `0` → PASS iff OU_BASE is `OK_OU`, LM_TRUE is `OK_LM`, and C3_DISPERSION_FILTERED is refused (`BOUNDARY` with transport_detected=1).
+- `2` → FAIL if either baseline fails, or if C3_DISPERSION_FILTERED is tagged `OK_OU`/`OK_LM` while transport_detected=1.
+- `3` → INCONCLUSIVE if required baselines are inadmissible (no claim).
+
+**Failure interpretation:**
+- If OU_BASE or LM_TRUE trigger transport_detected=1, the transport signature thresholds are not compatible with the declared window/dt (hard FAIL; do not tune—revise construction).
+- If C3_DISPERSION_FILTERED yields `OK_OU` or `OK_LM` with transport_detected=1, classifier integrity fails (hard FAIL: false-pass permitted).
+- If C3_DISPERSION_FILTERED is consistently inadmissible (fit fails), the effect is horizon/window dominated → INCONCLUSIVE (do not tune).
+
+**Interpretation boundary:**  
+This item certifies a C3 admissibility constraint: κ₂-slope regime claims are only valid when dispersive transport
+signatures are absent in the declared audit window. The detector is diagnostic and window-restricted; no new ontology
+is claimed beyond the declared C3 binding and refusal rule.
+
+---
+
+## S-0024: Cross-observable regime-consistency guard (Σ₂ multi-constraint admissibility)
+
+**Claim:**  
+κ₂-slope regime attribution is admissible only when it is **jointly consistent**
+with all established Σ₂ refusal guards — coupling (C4), temporal curvature (C1),
+variance drift (C5), and coherence aperture (C2/C5).
+
+This item certifies that no regime may be labeled `OK_OU` or `OK_LM`
+if any one of these structural diagnostics indicates inadmissibility.
+
+**Assumptions:**
+- Phase accumulation: Δϕ(t)=∫ ω dt (discrete cumulative sum; fixed Δt).
+- κ₂-slope classifier is applied only in a fixed late-time audit window.
+- Refusal guards are declared and fixed:
+  - Coupling guard: variance-of-mean ratio r_mean.
+  - Curvature guard: quadratic significance curv_z.
+  - Variance drift guard: drift_z.
+  - Aperture guard: η(t)=σϕ(t)/L.
+- Violations force BOUNDARY; never OK_*.
+
+**Repro:**
+- Command(s): `python toys/s0024_cross_observable_consistency_guard.py`
+- Inputs: none (deterministic seed; parameters declared in-file).
+- Outputs (with `--write_outputs`):
+  - `toys/outputs/s0024_cases.csv`
+  - `toys/outputs/s0024_audit.csv`
+
+**Expected output:**
+- **C1_OU_BASE:** admissible; all guards quiet → `OK_OU`
+- **C2_LM_TRUE:** admissible; all guards quiet → `OK_LM`
+- **C4_COUPLED:** coupling detected → `BOUNDARY`
+- **C1_CURVED:** curvature detected → `BOUNDARY`
+- **C5_APERTURE_EXCESS:** aperture violation → `BOUNDARY`
+
+Exit codes:
+- `0` → PASS if OU and LM baselines pass and all violations are refused.
+- `2` → FAIL if any violation yields OK_*.
+- `3` → INCONCLUSIVE if baseline admissibility fails.
+
+**Failure interpretation:**
+- Any incorrect OK_* assignment under violation indicates a failure of
+cross-observable admissibility enforcement.
+
+---
+
+## S-0025: Cross-window persistence guard for κ₂-slope regime claims (Σ₂ continuation gate)
+
+**Claim:**  
+κ₂-slope regime attribution (OK_OU / OK_LM) is admissible **only if** it persists across adjacent late-time continuation
+windows under a declared Σ₂ guard bundle (coupling, curvature, variance drift, aperture). Any guard violation in either window
+forces **BOUNDARY** (never OK_*), even if κ₂ scaling looks correct.
+
+**Assumptions:**
+- Phase accumulation: Δϕ(t)=∫₀ᵗ ω(s)ds (discrete cumulative sum with fixed Δt).
+- Centering: global DC removal only (one constant mean over ensemble×time), identical across cases.
+- κ₂ definition: κ₂(t)=Var_i[Δϕ_i(t)] computed per time index.
+- κ₂-slope classifier: α from linear fit of log κ₂ vs log t over **declared fixed windows**, with admissibility gates:
+  - min r² (`min_r2`)
+  - minimum κ₂ at window end (`min_k2_end`)
+  - minimum point count (`min_points`)
+- Continuation windows are **fixed and adjacent**:
+  - Window A: [20, 40]
+  - Window B: [40, 80]
+- Continuation consistency requirement (declared, fixed): |α_A − α_B| ≤ `alpha_consistency_max` for any OK_* claim.
+- True long-memory baseline is provided by fractional Gaussian noise (Davies–Harte) with fixed H (no scanning).
+- Σ₂ guard bundle is declared and window-restricted; any violation in either window forces BOUNDARY:
+  - Coupling (C4-style): r_mean = Var_t(mean_i ω_i(t)) / mean_i Var_t(ω_i(t)); violation if r_mean > `coupling_rmean_max`.
+  - Curvature (C1): fit ω̄(t)≈a+bt+ct² in-window and compute curv_z=|c|/SE(c); violation if curv_z > `curv_z_max`.
+  - Variance drift (Σ₂/C5): v̂(t)=Var_i(ω_i(t)); drift_z = |log(v̂(t_max)/v̂(t_min))|·√n_w; violation if drift_z > `var_drift_z_max`.
+  - Aperture (DFT admissibility): σϕ(t)=√κ₂(t); η(t)=σϕ(t)/L; violation if max η(t) > 1 in-window (L fixed).
+- Constructions are fixed (no tuning):
+  - C4_COUPLED adds a shared component with fixed amplitude (`coupled_amp`) to an OU baseline.
+  - C1_CURVED adds a deterministic quadratic mean term with fixed coefficient (`curved_c`) to an OU baseline.
+  - C5_APERTURE_EXCESS scales LM_TRUE by fixed factor (`aperture_scale`) to force η>1 while preserving α band.
+
+**Repro:**
+- Command(s): `python toys/s0025_cross_window_persistence_guard.py`
+- Inputs: none (deterministic seed; parameters declared in-file via `S0025Config`).
+- Outputs (only with `--write_outputs`):
+  - `toys/outputs/s0025_cases.csv`
+  - `toys/outputs/s0025_audit.csv`
+
+**Expected output:**
+- Fixed subcases (same fixed windows A and B):
+  - **C1_OU_BASE:** admissible in both windows; α_A, α_B in OU band; guards quiet in both → `OK_OU`.
+  - **C2_LM_TRUE:** admissible in both windows; α_A, α_B in LM band; guards quiet in both → `OK_LM`.
+  - **C4_COUPLED:** coupling violation in at least one window → `BOUNDARY` (never OK_*).
+  - **C1_CURVED:** curvature violation in at least one window → `BOUNDARY` (never OK_*).
+  - **C5_APERTURE_EXCESS:** aperture violation in at least one window → `BOUNDARY` (never OK_*).
+- Any baseline (OU_BASE or LM_TRUE) inadmissible in either window → overall `INCONCLUSIVE` (no claim).
+
+Exit codes:
+- `0` → PASS iff OU_BASE is `OK_OU`, LM_TRUE is `OK_LM`, and COUPLED/CURVED/APERTURE_EXCESS are all refused (`BOUNDARY`).
+- `2` → FAIL if either baseline fails, or if any constructed violation yields `OK_OU`/`OK_LM`.
+- `3` → INCONCLUSIVE if required baselines are inadmissible in either continuation window.
+
+**Failure interpretation:**
+- If OU_BASE or LM_TRUE are inadmissible in either window, the horizon/window is dominating; do not tune → INCONCLUSIVE.
+- If OU_BASE or LM_TRUE fail to persist across windows (band mismatch or |α_A−α_B| > max), the continuation premise is violated (Σ₂ persistence not satisfied).
+- If COUPLED yields any OK_* tag while coupling_violation=1 in either window, classifier integrity fails (hard FAIL).
+- If CURVED yields any OK_* tag while curvature_violation=1 in either window, curvature guard integrity fails (hard FAIL).
+- If APERTURE_EXCESS yields any OK_* tag while aperture_violation=1 in either window, aperture admissibility link fails (hard FAIL).
+
+**Interpretation boundary:**  
+This item certifies a continuation-level Σ₂ admissibility constraint: κ₂-slope regime claims require persistence under
+late-time continuation and simultaneous satisfaction of the declared guard bundle. All guard metrics are diagnostic and
+window-restricted; no additional ontology is claimed beyond the declared bounds.
+
+---
+
+## S-0026: Real-stream admissibility harness for κ₂-slope + Σ₂ guard bundle (C5 deployment gate)
+
+**Claim:**
+A measurement-like ω̂(t) stream can be evaluated by the same κ₂-slope + guard ladder without producing false `OK_*` outcomes: any C5/harness violation forces `BOUNDARY`, while synthetic OU/LM baselines still certify `OK_OU` / `OK_LM`.
+
+**Assumptions:**
+- Phase accumulation: Δϕ(t)=∫₀ᵗ ω(s)ds (discrete cumulative sum on a declared uniform analysis grid with fixed Δt).
+- Centering: global DC removal only (one constant mean), applied identically per case.
+- κ₂-slope classifier is computed from κ₂(t)=Var[Δϕ(t)] via a linear fit of log κ₂ vs log t in **two fixed late-time windows**:
+  - Window A: [20, 40]
+  - Window B: [40, 80]
+- Continuation admissibility is declared and fixed: |α_A − α_B| ≤ `alpha_consistency_max`.
+- A true long-memory baseline is provided by fractional Gaussian noise with fixed H=0.75 (Davies–Harte; no scanning).
+- Real-stream (single-trajectory) κ₂(t) is computed via an epistemic C5 device only:
+  - snap ω̂(t) to the uniform analysis grid (nearest-bin with averaging on collisions),
+  - construct a pseudo-ensemble by fixed block-resampling of ω-increments (fixed block length, fixed seed),
+  - compute κ₂(t) across bootstrap surrogates.
+  This is diagnostic only and introduces no ontological claim.
+- C5 harness refusal gates are declared and fixed (any violation => `BOUNDARY`):
+  - gap fraction after snapping exceeds `gap_frac_max`, or
+  - timestamp dt jitter exceeds `dt_jitter_rel_max`, or
+  - inferred resample factor exceeds `resample_factor_max`.
+
+**Repro:**
+- Command(s):
+  - `python toys/s0026_real_stream_harness_guard.py`
+  - Optional: `python toys/s0026_real_stream_harness_guard.py --input_csv <path/to.csv>`
+  - Outputs: `python toys/s0026_real_stream_harness_guard.py --write_outputs`
+- Inputs:
+  - None for built-in subcases (deterministic seed and parameters declared in `S0026Config`).
+  - Optional external CSV with header `time,omega` (strictly increasing time).
+- Outputs (only with `--write_outputs`):
+  - `toys/outputs/s0026_cases.csv`
+  - `toys/outputs/s0026_audit.csv`
+
+**Expected output:**
+- Fixed subcases:
+  - **C1_OU_BASE:** admissible in both windows; α in OU band consistently; no guard violations → `OK_OU`.
+  - **C2_LM_TRUE:** admissible in both windows; α in LM band consistently; no guard violations → `OK_LM`.
+  - **C5_IRREGULAR_GAPS:** measurement-like timestamps (jitter + dropout) must trigger harness refusal → `BOUNDARY` (never `OK_*`).
+- Pass condition: OU_BASE is `OK_OU`, LM_TRUE is `OK_LM`, and the stream case is **not** `OK_OU`/`OK_LM`.
+- Exit codes:
+  - `0` → PASS iff the above conditions hold.
+  - `2` → FAIL if any baseline fails, or if the stream case yields forbidden `OK_*`.
+  - `3` → INCONCLUSIVE if required fits/windows are inadmissible.
+
+**Failure interpretation:**
+- If OU_BASE or LM_TRUE fail to certify `OK_OU` / `OK_LM`, then the harness has broken compatibility with the established κ₂-slope ladder (regression in tool semantics or numerics).
+- If the stream case yields `OK_OU` or `OK_LM` while any harness refusal condition is triggered, the “no false OK under C5” contract is violated (hard FAIL).
+- If the stream case is consistently INCONCLUSIVE due to malformed input or inadmissible fits, the harness is operating at/over its C5 limits; do not tune thresholds (report as C5-limited).
+
+---
+
+## S-0027: Finite-N / finite-horizon robustness gate (no-scan stability)
+
+**Claim:**  
+Within a fixed, declared robustness menu (canonical, finite-N stress, finite-horizon stress) and a fixed replicate bundle, the κ₂-slope classifier and guard ladder produce stable tags: OU_BASE stays OK_OU, LM_TRUE stays OK_LM, and all constructed violation cases remain BOUNDARY.
+
+**Assumptions:**
+- Same constructions and guards as S-0024/S-0025.
+- Fixed config menu (no scanning):
+  - CFG_A: canonical (nT_A, nS_A)
+  - CFG_B: finite-N stress only (reduced nT, same horizon)
+  - CFG_C: finite-horizon stress only (reduced nS, canonical nT)
+- Fixed replicate bundle:
+  - deterministic seeds seed + 10*r for r in [0..n_rep-1]
+  - median α/r²/κ₂_end reporting; guard violations OR-ed across replicates
+- PASS requires tag stability across all configs; any INCONCLUSIVE makes overall INCONCLUSIVE.
+
+**Repro:**
+- Command(s): `python toys/s0027_finite_N_robustness_gate.py`
+- Inputs: none (deterministic seed; parameters declared in-file).
+- Outputs (only with `--write_outputs`):
+  - `toys/outputs/s0027_cases.csv`
+  - `toys/outputs/s0027_audit.csv`
+
+**Expected output:**
+- For each of CFG_A/CFG_B/CFG_C:
+  - **C1_OU_BASE:** `OK_OU`
+  - **C2_LM_TRUE:** `OK_LM`
+  - **C4_COUPLED:** `BOUNDARY`
+  - **C1_CURVED:** `BOUNDARY`
+  - **C5_APERTURE_EXCESS:** `BOUNDARY`
+- Exit codes:
+  - `0` PASS
+  - `2` FAIL if any tag flips forbiddenly
+  - `3` INCONCLUSIVE if any required case/config is inadmissible
+
+**Failure interpretation:**
+- If OU_BASE flips out of OU band under CFG_B/CFG_C while remaining admissible, κ₂-slope classification is not finite-robust under the declared menu → FAIL (do not tune; adjust the menu or declare a stricter minimum nT/horizon as a boundary).
+- If any violation case yields OK_* under any config, refusal logic is not stable → hard FAIL.

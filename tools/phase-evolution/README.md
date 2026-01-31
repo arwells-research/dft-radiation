@@ -385,6 +385,199 @@ Within a declared admissible late-time window:
 This establishes a **Σ₂ temporal-stationarity integrity boundary** for κ₂-based classification:  
 regime identification requires both correct κ₂ scaling and **locally stationary variance of ω(t)** within the audit window.
 
+### **S-0020 — κ₂ scaling admissibility as a direct projection of T-frame winding-sector structure (“derivational admissibility gate”)**
+
+Certifies that the observed late-time **κ₂(t) power-law scaling exponent α is not merely statistical, but is a direct
+projection of admissible winding-sector structure in the Temporal (T) frame.**
+
+In Dual-Frame Theory, admissible phase evolution must arise from **scalar progression constrained by winding-sector topology**.
+Therefore, any κ₂(t) scaling that falls outside the admissible winding-sector envelope must be treated as **BOUNDARY**, not OK.
+
+This toy makes that connection explicit:
+
+- It computes κ₂(t) = Var[Δϕ(t)] from simulated ω(t) trajectories.
+- It maps the inferred α onto the corresponding **T-frame winding-sector signature**.
+- It verifies that:
+  - **Diffusive OU processes** project to the expected winding-sector α ≈ 1.
+  - **True long-memory Gaussian processes** project to the expected α ≈ 2H.
+  - Any process that reproduces κ₂ scaling while violating the implied **winding-sector curvature or continuity constraints**
+    is refused and labeled **BOUNDARY**.
+
+Within a declared admissible audit window:
+
+- **C1_OU_BASE**: short-memory OU progression.  
+  κ₂ scaling is admissible and corresponds to an allowed winding sector → **OK_OU**.
+- **C2_LM_TRUE**: uncoupled long-memory Gaussian progression (fixed H).  
+  κ₂ scaling is admissible and corresponds to a distinct allowed winding sector → **OK_LM**.
+- **NON_ADMISSIBLE**: synthetic progression constructed to match κ₂ scaling while breaking winding-sector admissibility.  
+  The derivational admissibility gate detects the inconsistency and forces **BOUNDARY**.
+
+This establishes the first **derivational closure link** between measurable κ₂(t) scaling and the underlying
+**topological admissibility of motion in the T-frame** — making κ₂ not just a classifier, but a **geometric diagnostic.**
+
+### **S-0021 — κ₂-Slope vs Coherence-Aperture Consistency (“DFT admissibility gate”)**
+
+Certifies that the observed late-time **κ₂(t) scaling exponent α is admissible only when the implied phase-diffusion
+envelope remains within the DFT coherence-aperture limit L.**
+
+In Dual-Frame Theory, κ₂(t) describes the spread of accumulated phase:
+
+  κ₂(t) = Var[Δϕ(t)] with Δϕ(t)=∫₀ᵗ ω(s)ds
+
+The square-root of κ₂(t) defines the physical phase-spread:
+
+  σϕ(t) = √κ₂(t)
+
+DFT’s **coherence aperture L** bounds how much phase spread remains physically admissible.
+Therefore, κ₂-slope regime classification is valid only when:
+
+  η(t) = σϕ(t) / L ≤ 1 for all t in the declared audit window.
+
+Any case with η > 1 represents an **inadmissible phase-diffusion regime** and must be refused
+and labeled **BOUNDARY**, regardless of κ₂-slope agreement.
+
+This toy makes that admissibility condition explicit:
+
+- It computes κ₂(t) from simulated ω(t) trajectories.
+- It evaluates the normalized phase-spread η(t)=√κ₂(t)/L.
+- It verifies that:
+  - **Diffusive OU baselines** remain within aperture → **OK_OU**.
+  - **True long-memory Gaussian baselines** remain within aperture → **OK_LM**.
+  - A constructed case that preserves κ₂-slope but exceeds the aperture budget
+    is detected and labeled **BOUNDARY**.
+
+Within a declared admissible audit window:
+
+- **C1_OU_BASE**: OU-like phase progression; η ≤ 1 → **OK_OU**.
+- **C2_LM_TRUE**: long-memory Gaussian progression; η ≤ 1 → **OK_LM**.
+- **C5_APERTURE_EXCESS**: identical κ₂-slope class to LM_TRUE, but η > 1 → **BOUNDARY**.
+
+This establishes the first direct **link between κ₂ scaling and the physical coherence aperture L**, making κ₂ not only
+a classifier, but a structural admissibility diagnostic within DFT.
+
+### **S-0022 — Estimator-manufactured κ₂ scaling guard (“C5 integrity gate”)**
+
+Certifies that κ₂(t)=Var(Δϕ(t)) slope-based regime classification (OU vs long-memory) is **not admissible under certain
+inference/estimator pathologies**, even when the fitted κ₂ slope falls inside an OU/LM band.
+
+This toy enforces a strict **C5 refusal rule**: any detected estimator-integrity violation must be labeled **BOUNDARY**,
+never `OK_OU` / `OK_LM`.
+
+It makes this concrete using fixed, declared C5 confounds:
+
+- **Overlap reuse:** stride-1 moving-average smoothing reuses samples; if reuse exceeds a declared limit, κ₂ claims are refused.
+- **Resample dt mismatch:** downsampling changes the true time step; integrating with the wrong dt can manufacture scaling; such cases are refused.
+- **Differencing:** replacing ω with Δω changes the modeled observable; κ₂-slope regime attribution is refused by construction.
+
+Within a declared admissible audit window:
+
+- **C1_OU_BASE:** short-memory OU baseline → `OK_OU`.
+- **C2_LM_TRUE:** uncoupled long-memory Gaussian baseline (fixed H) → `OK_LM`.
+- **C5 confounds:** may produce in-band slopes, but must be refused → `BOUNDARY`.
+
+This establishes a **C5 estimator-integrity boundary**: κ₂-slope regime certification requires not only admissible scaling,
+but also an inference pipeline that does not manufacture or invalidate that scaling.
+
+### **S-0023 — Transport-manufactured κ₂ scaling guard (“C3 integrity gate”)**
+
+Certifies that late-time **κ₂(t) power-law scaling** can be rendered **non-admissible for C2 memory attribution**
+when a declared **C3 geometric transport binding** (dispersion / mode-mixing style) imprints a detectable
+transport signature onto the observed phase-rate stream.
+
+This toy makes the integrity boundary explicit:
+
+- It computes κ₂(t)=Var[Δϕ(t)] from ω(t) and estimates α by audited log-slope over a fixed window.
+- It applies a declared, fixed **C3 dispersive LTI kernel** to an OU baseline to produce an observed ω̂(t).
+- It enforces a **transport signature detector** (window-restricted autocovariance oscillation + negative-mass ratio).
+- It verifies that:
+  - **OU baseline** remains admissible and classifies as **OK_OU**.
+  - **True long-memory baseline** remains admissible and classifies as **OK_LM**.
+  - **C3 dispersion-filtered OU** is **refused** and labeled **BOUNDARY** when transport is detected, even if κ₂ scaling appears well fit.
+
+This establishes the C3 integrity boundary: κ₂-slope is a valid C2 diagnostic only when transport signatures are absent,
+preventing “C3-manufactured scaling” from being misread as long-memory.
+
+### **S-0024 — Cross-observable κ₂-slope regime consistency (“Σ₂ multi-constraint admissibility gate”)**
+
+Certifies that **κ₂-based regime attribution is admissible only when all
+independent Σ₂ structural diagnostics agree.**
+
+While earlier S-series items established individual refusal boundaries
+(coupling, curvature, variance drift, aperture, and transport),
+S-0024 unifies them into a single admissibility gate.
+
+This toy verifies that:
+
+- **OU-like diffusion and true long-memory baselines remain admissible** and are correctly tagged,
+- **cross-trajectory coupling (C4)** is detected and refused,
+- **temporal curvature (C1)** is detected and refused,
+- **variance drift (C5)** is detected and refused,
+- and **coherence-aperture violations** are detected and refused,
+
+ensuring that κ₂-slope alone can never yield a false OK classification.
+
+This establishes the first **multi-observable Σ₂ admissibility contract**
+for phase-evolution inference in DFT.
+
+### **S-0025 — Cross-window persistence of κ₂-slope regime admissibility (“Σ₂ continuation gate”)**
+
+Certifies that κ₂-based regime attribution (OU-like vs long-memory-like) is admissible **only if it persists across
+adjacent late-time continuation windows under the full Σ₂ guard bundle** (coupling, temporal curvature, variance drift,
+and coherence-aperture budget).
+
+This toy makes the continuation requirement explicit:
+
+- It computes κ₂(t)=Var[Δϕ(t)] from ω(t) trajectories and fits log κ₂ vs log t in two fixed windows.
+- It enforces that regime tags are allowed only when:
+  - both window fits are admissible,
+  - the inferred scaling exponent α remains consistent across windows,
+  - and no Σ₂ guard fires in either window.
+- It verifies that:
+  - **C1_OU_BASE** persists as OU-like across windows → `OK_OU`.
+  - **C2_LM_TRUE** persists as long-memory-like across windows → `OK_LM`.
+  - Constructed violations (cross-trajectory coupling, temporal curvature, aperture excess) are refused as **BOUNDARY**,
+    forbidding “false OK” under continuation.
+
+This establishes a continuation-level integrity boundary: κ₂-slope classification is not merely window-local; it is admissible
+only when stable under late-time continuation and consistent with the declared Σ₂ admissibility constraints.
+
+### **S-0026 — Real-stream admissibility harness for κ₂-slope + Σ₂ guard bundle (“C5 deployment gate”)**
+
+Certifies a *deployment harness* that applies the already-certified κ₂-slope classifier and Σ₂ refusal logic
+to a **measurement-like** phase-rate stream ω̂(t), without introducing new regime semantics.
+
+This toy enforces the core operational requirement for field use:
+
+- **Baselines still certify:** independent OU and true long-memory Gaussian (fixed H) cases return `OK_OU` and `OK_LM`.
+- **No false OK under C5:** when observation artifacts violate declared harness limits (irregular sampling, gaps, dt mismatch),
+  the system must return **`BOUNDARY`** (never `OK_*`), even if κ₂-slope fits are numerically excellent.
+
+Mechanically:
+
+- ω̂(t) is snapped to a declared uniform analysis grid.
+- A pseudo-ensemble is constructed by fixed block-resampling (epistemic only) to form κ₂(t).
+- κ₂-slope is fit in two fixed late-time windows and must remain consistent under continuation.
+- Any C5/harness violation forces refusal.
+
+This establishes a minimal, auditable I/O and refusal contract for applying the S-series ladder to real streams,
+without adding new assumptions about the ontology of ω.
+
+### **S-0027 — Finite-N / finite-horizon robustness gate (no-scan stability menu)**
+
+Certifies that the established κ₂-slope + guard ladder yields stable tags under a fixed robustness menu:
+- canonical configuration,
+- finite-N stress (reduced nT, same horizon),
+- finite-horizon stress (reduced horizon, canonical nT),
+
+with a fixed replicate bundle to reduce finite-N slope jitter without scanning.
+
+PASS requires:
+- OU_BASE stays **OK_OU** across all configs,
+- LM_TRUE stays **OK_LM** across all configs,
+- all constructed violation cases remain **BOUNDARY** across all configs.
+
+This item establishes a practical minimum-robustness contract for deploying the classifier/guard ladder on finite data.
+
 ---
 
 ## Why this matters for DFT

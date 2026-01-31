@@ -37,6 +37,7 @@ Difficulty tiers:
 - **Initial classification attempt:** C2 + C5  
 - **Issue encountered:**  
   Apparent retroactive influence raised concern about temporal (C1) involvement.
+- **Σ₂ reinterpretation (2026):** Reinterpreted as reconstruction-adequate / continuation-illegitimate under Σ₂ criteria.
 - **Resolution:**  
   The effect operates entirely via manipulation of **correlations** (C2) and
   **measurement/inference choices** (C5). No physical phase evolution is altered.
@@ -86,6 +87,7 @@ Difficulty tiers:
 - **Initial classification attempt:** C1 + C4  
 - **Issue encountered:**  
   Whether statistical emission implied C2 as fundamental.
+- **Σ₂ reinterpretation (2026):** Reinterpreted as reconstruction-adequate / continuation-illegitimate under Σ₂ criteria (mixture/ensemble masquerade boundary).
 - **Resolution:**  
   Emission statistics require ensemble description (C2), while the spectrum reflects
   temporal phase constraints (C1) and interface physics (C4).
@@ -133,6 +135,7 @@ Difficulty tiers:
 - **Initial classification attempt:** C4 + C5  
 - **Issue encountered:**  
   Whether cavity mode structure constituted a new constraint.
+- **Σ₂ reinterpretation (2026):** Reinterpreted as reconstruction-adequate / continuation-illegitimate under Σ₂ criteria (basis/sector choice can masquerade as “new mode”).  
 - **Resolution:**  
   Mode density and geometry are transport constraints (C3);
   coupling is C4; readout is C5.
@@ -196,6 +199,7 @@ Difficulty tiers:
   energy, but depends on the temporal profile of the recoil impulse relative
   to electronic phase timescales. Identical recoil energies can yield different
   ionization outcomes, raising concern about implicit history dependence.
+- **Σ₂ reinterpretation (2026):** Reinterpreted as reconstruction-adequate / continuation-illegitimate under Σ₂ criteria (estimator/discrimination masquerade boundary).
 - **Resolution:**  
   Effect is classified as a phase–interface phenomenon (C4) whose observability
   and validation depend critically on topology-based event discrimination
@@ -232,10 +236,10 @@ Difficulty tiers:
 
 ## Summary statistics
 
-- **Total challenges logged:** 12  
-- **Easy:** 4  
-- **Ambiguous:** 4  
-- **Boundary clarification required:** 4  
+- **Total challenges logged:** 12
+- **Easy:** 4
+- **Ambiguous:** 4
+- **Boundary clarification required:** 4
 
 No case required introduction of a new constraint class.
 
@@ -253,4 +257,3 @@ No case required introduction of a new constraint class.
 
 **Challenge Log**  
 *dft-radiation — documenting where the framework was tested, not where it was comfortable*
-
